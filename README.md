@@ -65,7 +65,8 @@ uv run ruff check . && uv run ruff format --check . && uv run mypy && uv run pyt
 
 The version comes from the git tag via `hatch-vcs` (`v1.2.0` → `1.2.0`); untagged checkouts report
 `0.0.0`. Releases are cut by running the **Publish** workflow manually (Actions → Publish → Run workflow,
-entering e.g. `1.2.0`): it tests, tags `v1.2.0`, builds and publishes to PyPI through trusted publishing, which needs a
+entering `major`, `minor`, `hotfix`, or an explicit version like `1.2.0`; the bump is applied to the latest
+`v*` tag): it tests, tags the new version, builds and publishes to PyPI through trusted publishing, which needs a
 `pypi` environment configured on both PyPI and GitHub.
 
 MIT licensed.

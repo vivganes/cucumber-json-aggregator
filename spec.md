@@ -132,7 +132,7 @@ LICENSE
 - **Lint/format:** ruff
 - **Types:** mypy (strict)
 - **CI (`ci.yml`):** ruff, mypy, and pytest on Python 3.10 (the minimum supported version) on Linux
-- **Publish (`publish.yml`):** manually triggered (`workflow_dispatch`) with a `version` input from `main`: runs the checks, creates tag `v<version>`, `uv build`, then PyPI trusted publishing (OIDC) using a `pypi` environment that must be configured on both PyPI and GitHub; the tag is pushed only after publishing succeeds
+- **Publish (`publish.yml`):** manually triggered (`workflow_dispatch`) from `main` with a `version` input — `major`, `minor`, `hotfix` (bumps the latest `v*` tag) or an explicit semver: runs the checks, creates the new `v<version>` tag, `uv build`, then PyPI trusted publishing (OIDC) using a `pypi` environment that must be configured on both PyPI and GitHub; the tag is pushed only after publishing succeeds
 
 ## Open points (current defaults)
 

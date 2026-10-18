@@ -4,9 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to release, without the leading v (e.g. 1.2.0). Creates tag v<version>."
+        description: |
+          Bump type (major, minor, hotfix) or explicit semver (e.g. 1.2.0)
         required: true
-        type: string
+        default: minor
 
 jobs:
   publish:
@@ -16,26 +17,42 @@ jobs:
       id-token: write # PyPI trusted publishing (OIDC)
       contents: write # push the release tag
     steps:
-      - name: Validate inputs
-        env:
-          VERSION: ${{ inputs.version }}
+      - name: Require main branch
         run: |
           if [ "$GITHUB_REF" != "refs/heads/main" ]; then
             echo "::error::Run this workflow from the main branch (got $GITHUB_REF)"; exit 1
           fi
-          if ! printf '%s' "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([abc]|rc)?[0-9]*$'; then
-            echo "::error::'$VERSION' is not a valid version like 1.2.0 or 1.2.0rc1"; exit 1
-          fi
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Ensure the tag does not exist yet
+
+      - name: Resolve version
+        id: version
         env:
-          VERSION: ${{ inputs.version }}
+          INPUT: ${{ inputs.version }}
         run: |
-          if git rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
-            echo "::error::Tag v$VERSION already exists"; exit 1
+          LATEST_TAG=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || echo "v0.0.0")
+          echo "Latest tag: $LATEST_TAG"
+          if ! [[ "${LATEST_TAG#v}" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+            echo "::error::Cannot parse latest tag '$LATEST_TAG'"; exit 1
           fi
+          MAJOR=${BASH_REMATCH[1]}; MINOR=${BASH_REMATCH[2]}; PATCH=${BASH_REMATCH[3]}
+          case "$INPUT" in
+            major) NEW="$((MAJOR + 1)).0.0" ;;
+            minor) NEW="$MAJOR.$((MINOR + 1)).0" ;;
+            hotfix|patch) NEW="$MAJOR.$MINOR.$((PATCH + 1))" ;;
+            *)
+              if ! [[ "$INPUT" =~ ^[0-9]+\.[0-9]+\.[0-9]+([abc]|rc)?[0-9]*$ ]]; then
+                echo "::error::'$INPUT' is neither major/minor/hotfix nor a version like 1.2.0"; exit 1
+              fi
+              NEW="$INPUT" ;;
+          esac
+          if git rev-parse -q --verify "refs/tags/v$NEW" >/dev/null; then
+            echo "::error::Tag v$NEW already exists"; exit 1
+          fi
+          echo "version=$NEW" >> "$GITHUB_OUTPUT"
+          echo "Releasing v$NEW"
+
       - uses: astral-sh/setup-uv@v5
       - name: Test
         run: |
@@ -46,12 +63,8 @@ jobs:
           uv run pytest
       # Tag locally first so hatch-vcs derives the version from it; push only after PyPI succeeds.
       - name: Tag locally
-        env:
-          VERSION: ${{ inputs.version }}
-        run: git tag "v$VERSION"
+        run: git tag "v${{ steps.version.outputs.version }}"
       - run: uv build
       - uses: pypa/gh-action-pypi-publish@release/v1
       - name: Push tag
-        env:
-          VERSION: ${{ inputs.version }}
-        run: git push origin "v$VERSION"
+        run: git push origin "v${{ steps.version.outputs.version }}"
