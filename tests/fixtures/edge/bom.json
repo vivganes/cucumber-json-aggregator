@@ -1,0 +1,149 @@
+﻿[
+  {
+    "uri": "features/login.feature",
+    "id": "login",
+    "keyword": "Feature",
+    "name": "Login",
+    "line": 1,
+    "description": "run1",
+    "tags": [
+      {
+        "name": "@auth",
+        "line": 1
+      }
+    ],
+    "elements": [
+      {
+        "id": "login",
+        "keyword": "Background",
+        "type": "background",
+        "name": "",
+        "line": 3,
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "app is open",
+            "line": 4,
+            "match": {
+              "location": "Steps.app_is_open()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "login;valid-login",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "valid login",
+        "line": 10,
+        "tags": [],
+        "steps": [
+          {
+            "keyword": "When ",
+            "name": "i do valid login",
+            "line": 11,
+            "match": {
+              "location": "Steps.i_do_valid_login()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "Hooks.hook()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 500
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "Hooks.hook()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 500
+            }
+          }
+        ]
+      },
+      {
+        "id": "login",
+        "keyword": "Background",
+        "type": "background",
+        "name": "",
+        "line": 3,
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "app is open",
+            "line": 4,
+            "match": {
+              "location": "Steps.app_is_open()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "login;invalid-login",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "invalid login",
+        "line": 15,
+        "tags": [],
+        "steps": [
+          {
+            "keyword": "When ",
+            "name": "i do invalid login",
+            "line": 16,
+            "match": {
+              "location": "Steps.i_do_invalid_login()"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 1000000,
+              "error_message": "boom"
+            }
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "Hooks.hook()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 500
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "Hooks.hook()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 500
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

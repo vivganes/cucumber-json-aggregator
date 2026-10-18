@@ -1,0 +1,58 @@
+[
+  {
+    "uri": "features/outline.feature",
+    "id": "outline",
+    "keyword": "Feature",
+    "name": "Outline",
+    "line": 1,
+    "description": "",
+    "tags": [],
+    "elements": [
+      {
+        "id": "outline;eat;;1",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "Eat 1",
+        "line": 12,
+        "tags": [],
+        "steps": [
+          {
+            "keyword": "When ",
+            "name": "i do Eat 1",
+            "line": 13,
+            "match": {
+              "location": "Steps.i_do_Eat_1()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "outline;eat;;2",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "Eat 2",
+        "line": 13,
+        "tags": [],
+        "steps": [
+          {
+            "keyword": "When ",
+            "name": "i do Eat 2",
+            "line": 14,
+            "match": {
+              "location": "Steps.i_do_Eat_2()"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 1000000,
+              "error_message": "boom"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

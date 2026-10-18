@@ -1,0 +1,62 @@
+[
+  {
+    "hello": "world"
+  },
+  42,
+  "str",
+  {
+    "uri": "features/ok.feature",
+    "id": "ok",
+    "keyword": "Feature",
+    "name": "Ok",
+    "line": 1,
+    "description": "",
+    "tags": [],
+    "elements": [
+      {
+        "id": "ok;a",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "a",
+        "line": 3,
+        "tags": [],
+        "steps": [
+          {
+            "keyword": "When ",
+            "name": "i do a",
+            "line": 4,
+            "match": {
+              "location": "Steps.i_do_a()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "Hooks.hook()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 500
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "Hooks.hook()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 500
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,76 @@
+[
+  {
+    "uri": "features/sparse.feature",
+    "id": "sparse",
+    "keyword": "Feature",
+    "name": "Sparse",
+    "line": 1,
+    "description": "",
+    "tags": [],
+    "elements": [
+      {
+        "id": "h;only",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "hooks",
+        "line": 4,
+        "before": [
+          {
+            "match": {
+              "location": "Hooks.hook()"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 500
+            }
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "Hooks.hook()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 500
+            }
+          }
+        ]
+      },
+      {
+        "id": "h;nores",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "nores",
+        "line": 8,
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "x",
+            "line": 9,
+            "match": {
+              "location": "x"
+            }
+          }
+        ]
+      },
+      {
+        "id": "h;nodur",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "nodur",
+        "line": 12,
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "x",
+            "line": 13,
+            "result": {
+              "status": "passed"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

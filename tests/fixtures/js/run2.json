@@ -1,0 +1,57 @@
+[
+  {
+    "uri": "features/search.feature",
+    "id": "search",
+    "keyword": "Feature",
+    "name": "Search",
+    "line": 1,
+    "description": "js run2",
+    "tags": [],
+    "elements": [
+      {
+        "id": "search;basic-search",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "basic search",
+        "line": 6,
+        "tags": [],
+        "steps": [
+          {
+            "keyword": "When ",
+            "name": "i do basic search",
+            "line": 7,
+            "match": {
+              "location": "Steps.i_do_basic_search()"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "search;empty-search",
+        "keyword": "Scenario",
+        "type": "scenario",
+        "name": "empty search",
+        "line": 10,
+        "tags": [],
+        "steps": [
+          {
+            "keyword": "When ",
+            "name": "i do empty search",
+            "line": 11,
+            "match": {
+              "location": "Steps.i_do_empty_search()"
+            },
+            "result": {
+              "status": "undefined",
+              "duration": 1000000
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
