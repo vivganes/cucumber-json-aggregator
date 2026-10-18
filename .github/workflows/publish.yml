@@ -1,8 +1,12 @@
 name: Publish
 
 on:
-  push:
-    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, without the leading v (e.g. 1.2.0). Creates tag v<version>."
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -10,11 +14,44 @@ jobs:
     environment: pypi
     permissions:
       id-token: write # PyPI trusted publishing (OIDC)
-      contents: read
+      contents: write # push the release tag
     steps:
+      - name: Validate inputs
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "::error::Run this workflow from the main branch (got $GITHUB_REF)"; exit 1
+          fi
+          if ! printf '%s' "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+([abc]|rc)?[0-9]*$'; then
+            echo "::error::'$VERSION' is not a valid version like 1.2.0 or 1.2.0rc1"; exit 1
+          fi
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Ensure the tag does not exist yet
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if git rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
+            echo "::error::Tag v$VERSION already exists"; exit 1
+          fi
       - uses: astral-sh/setup-uv@v5
+      - name: Test
+        run: |
+          uv sync --python 3.10
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy
+          uv run pytest
+      # Tag locally first so hatch-vcs derives the version from it; push only after PyPI succeeds.
+      - name: Tag locally
+        env:
+          VERSION: ${{ inputs.version }}
+        run: git tag "v$VERSION"
       - run: uv build
       - uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Push tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: git push origin "v$VERSION"
